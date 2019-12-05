@@ -25,17 +25,18 @@ io.on('connection', (socket) => {
 			users: usersService.getAllUsers()
 		});
 	});
-	socket.on('disconnect', () => {
-		usersService.removeUser(socket.id);
-		socket.broadcast.emit('update', {
-			users: usersService.getAllUsers()
-		});
-	});
+	
 	socket.on('message', (message) => {
 		const {name} = usersService.getUserById(socket.id);
 		socket.broadcast.emit('message', {
 			text: message.text,
 			from: name
+		});
+	});
+	socket.on('disconnect', () => {
+		usersService.removeUser(socket.id);
+		socket.broadcast.emit('update', {
+			users: usersService.getAllUsers()
 		});
 	});
 });
